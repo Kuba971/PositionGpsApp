@@ -1,0 +1,52 @@
+<div *ngIf="positions">
+  <h1>Liste des positions GPS : </h1>
+  <ul>
+    @for (position of positions; track position.positionId) {
+      <p>
+          <input type="checkbox" [(ngModel)]="position.isChecked" (click)="onCheck(position)"/>
+          {{position.positionName}}
+          {{position.positionLatitude}}
+          {{position.positionLongitude}}
+        </p>
+    }
+  </ul>
+</div>
+<div>
+  <p *ngIf="selectedPositions && selectedPositions.length > 0 && selectedPositions.length < 2">
+    <button (click)="onDelete()">Supprimer</button>
+  </p>
+  <p *ngIf="selectedPositions && selectedPositions.length > 1 && selectedPositions.length < 3">
+    <button (click)="onEvaluateDistance()">Éloignées de plus de 10km</button>
+  </p>
+</div>
+
+<div *ngIf="lessThan10Km !== undefined">
+  <h2>Évaluation de la distance entre {{selectedPositions[0].positionName}} et {{selectedPositions[1].positionName}} :</h2>
+  <div *ngIf="lessThan10Km">
+    <h4>{{selectedPositions[0].positionName}} est à moins de 10km de {{selectedPositions[1].positionName}}</h4>
+  </div>
+  <div *ngIf="!lessThan10Km">
+    <h4>{{selectedPositions[0].positionName}} est à plus de 10km de {{selectedPositions[1].positionName}}</h4>
+  </div>
+</div>
+
+<div>
+  <h2>Ajoutez une nouvelle position GPS :</h2>
+  <form (ngSubmit)="onSubmit()">
+    <p>
+      <label for="name">Name</label>
+      <input type="text" id="name" [(ngModel)]="newPosition.positionName" [ngModelOptions]="{standalone: true}"/>
+    </p>
+    <br />
+    <p>
+      <label for="long">Longitude</label>
+      <input type="text" id="long" [(ngModel)]="newPosition.positionLongitude" [ngModelOptions]="{standalone: true}"/>
+    </p>
+    <br />
+    <p>
+      <label for="lat">Latitude</label>
+      <input type="text" id="lat" [(ngModel)]="newPosition.positionLatitude" [ngModelOptions]="{standalone: true}"/>
+    </p>
+    <button type="submit">Ajouter</button>
+  </form>
+</div> 
